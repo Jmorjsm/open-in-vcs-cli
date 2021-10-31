@@ -16,22 +16,31 @@ export default class Open extends Command {
   run(): PromiseLike<any> {
     this.log('open command run in directory ' + process.cwd())
     this.getVcsRepository()
-    throw new Error('Method not implemented.')
   }
 
-  getVcsRepository(){
+  async getVcsRepository(){
     const git = simpleGit()
-    git.checkIsRepo().then(isRepo => {
-      if(isRepo){
-        this.log('is a repo')
-        git.revparse(['--show-prefix']).then(prefix=>
-          this.log('prefix: ' + prefix)
-        )
+    let isRepo = await git.checkIsRepo()
 
+    if(isRepo){
+      this.log('is a repo')
+      let remotes = await git.getRemotes(true)
+      let remoteUrl = remotes[0].refs.fetch
+
+      if(remoteUrl.endsWith(".git")){
+        remoteUrl = remoteUrl.substring(0, remoteUrl.length-4)
       }
-      else{
-        this.log('is not a repo')
-      }
-    })
+
+      let branchName = (await git.branch()).current
+
+      let relativePath = await git.revparse(['--show-prefix'])
+
+      let urlToOpen = `${remoteUrl}/tree/${branchName}/${relativePath}`
+
+      this.log(urlToOpen)
+    }
+    else{
+      this.log('is not a repo')
+    }
   }
 }
