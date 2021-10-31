@@ -1,6 +1,7 @@
 import {Command, flags} from '@oclif/command'
 import simpleGit, {SimpleGit} from 'simple-git'
 
+
 export default class Open extends Command {
   static description = 'open the line/file/directory/repo in your VCS'
 
@@ -20,6 +21,8 @@ export default class Open extends Command {
 
   async getVcsRepository(){
     const git = simpleGit()
+    const open = require('open')
+
     let isRepo = await git.checkIsRepo()
 
     if(isRepo){
@@ -38,6 +41,7 @@ export default class Open extends Command {
       let urlToOpen = `${remoteUrl}/tree/${branchName}/${relativePath}`
 
       this.log(urlToOpen)
+      open(urlToOpen)
     }
     else{
       this.log('is not a repo')
