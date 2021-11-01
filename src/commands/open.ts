@@ -1,6 +1,7 @@
 import Command, {flags} from '@oclif/command'
 import simpleGit, {SimpleGit} from 'simple-git'
-
+import GitHubUrlProvider from '../providers/githubUrlProvider'
+import AzureDevOpsUrlProvider from '../providers/azureDevOpsUrlProvider'
 
 export default class Open extends Command {
   static description = 'open the line/file/directory/repo in your VCS'
@@ -39,7 +40,7 @@ export default class Open extends Command {
 
     let isRepo = await git.checkIsRepo()
 
-    if(isRepo){
+    if(isRepo) {
       this.log('is a repo')
       let remotes = await git.getRemotes(true)
       let remoteUrl = remotes[0].refs.fetch
@@ -54,17 +55,24 @@ export default class Open extends Command {
 
       relativePath = path.join(relativePath, args.fileName)
 
-      let urlToOpen = `${remoteUrl}/tree/${branchName}/${relativePath}?plain=1`
-
-      if(flags.lineNumber != undefined) {
-        urlToOpen = `${urlToOpen}#L${flags.lineNumber}`
-      }
+      let urlToOpen = this.buildUrl(remoteUrl, branchName, relativePath, flags)
 
       this.log(urlToOpen)
       open(urlToOpen)
-    }
-    else{
+    } else {
       this.log('is not a repo')
     }
+  }
+
+  private buildUrl(remoteUrl: string, branchName: string, relativePath: string, flags: { lineNumber: number | undefined }) : string{
+    let providers = [new GitHubUrlProvider(), new AzureDevOpsUrlProvider()]
+
+    providers.forEach(provider => {
+      if(provider.isMatch(remoteUrl)) {
+        return provider.buildUrl(remoteUrl, relativePath, branchName)
+      }
+    });
+
+    throw new Error('failed to build url as no url providers matched')
   }
 }
