@@ -67,12 +67,14 @@ export default class Open extends Command {
   private buildUrl(remoteUrl: string, branchName: string, relativePath: string, flags: { lineNumber: number | undefined }) : string{
     let providers = [new GitHubUrlProvider(), new AzureDevOpsUrlProvider()]
 
-    providers.forEach(provider => {
+    for(let i = 0; i < providers.length; ++i){
+      let provider = providers[i]
       if(provider.isMatch(remoteUrl)) {
+        this.log(`Using provider of type "${typeof(provider)}"`)
         return provider.buildUrl(remoteUrl, relativePath, branchName)
       }
-    });
+    }
 
-    throw new Error('failed to build url as no url providers matched')
+    throw new Error('Failed to build url as no url providers matched the remote.')
   }
 }
