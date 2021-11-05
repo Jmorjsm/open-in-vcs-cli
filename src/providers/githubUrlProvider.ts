@@ -4,7 +4,7 @@ export default class GitHubUrlProvider implements urlProviderBase {
   }
 
   isMatch(remoteUrl: string): boolean {
-    return remoteUrl.startsWith('https://github.com/')
+    return remoteUrl.includes('github.com/')
   }
 
   buildUrl(remoteUrl: string, filePath: string, branchName : string, startLineNumber?: number, startColumnNumber?: number, endLineNumber?: number, endColumnNumber?: number): string {
