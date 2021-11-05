@@ -4,7 +4,7 @@ export default class AzureDevOpsUrlProvider implements urlProviderBase {
   }
 
   isMatch(remoteUrl: string): boolean {
-    return remoteUrl.startsWith('https://dev.azure.com/')
+    return remoteUrl.includes('dev.azure.com/')
   }
 
   buildUrl(remoteUrl: string, filePath: string, branchName : string, startLineNumber?: number, startColumnNumber?: number, endLineNumber?: number, endColumnNumber?: number): string {
