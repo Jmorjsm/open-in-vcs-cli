@@ -2,6 +2,8 @@ import Command, {flags} from '@oclif/command'
 import simpleGit, {SimpleGit} from 'simple-git'
 import GitHubUrlProvider from '../providers/githubUrlProvider'
 import AzureDevOpsUrlProvider from '../providers/azureDevOpsUrlProvider'
+import { BuildUrlRequest } from '../models/BuildUrlRequest'
+import { UrlProviderBase } from '../providers/urlProviderBase'
 
 export default class Open extends Command {
   static description = 'open the line/file/directory/repo in your VCS'
@@ -20,7 +22,10 @@ export default class Open extends Command {
   ]
 
   static flags = {
-    lineNumber: flags.integer(),
+    startLineNumber : flags.integer(),
+    startColumnNumber : flags.integer(),
+    endLineNumber : flags.integer(),
+    endColumnNumber : flags.integer(),
   }
 
 
@@ -35,8 +40,11 @@ export default class Open extends Command {
     const path = require('path');
 
     const {args, flags} = this.parse(Open)
-    this.log(`fileName: ${args.fileName}`)
-    this.log(`lineNumber: ${flags.lineNumber}`)
+    this.log(`fileName          : ${args.fileName}`)
+    this.log(`startLineNumber   : ${flags.startLineNumber}`)
+    this.log(`startColumnNumber : ${flags.startColumnNumber}`)
+    this.log(`endLineNumber     : ${flags.endLineNumber}`)
+    this.log(`endColumnNumber   : ${flags.endColumnNumber}`)
 
     let isRepo = await git.checkIsRepo()
 
@@ -55,7 +63,15 @@ export default class Open extends Command {
 
       relativePath = path.join(relativePath, args.fileName)
 
-      let urlToOpen = this.buildUrl(remoteUrl, branchName, relativePath, flags)
+      let buildUrlRequest : BuildUrlRequest = new BuildUrlRequest(remoteUrl,
+        branchName,
+        relativePath,
+        flags.startLineNumber,
+        flags.startColumnNumber,
+        flags.endLineNumber,
+        flags.endColumnNumber)
+
+      let urlToOpen = this.buildUrl(buildUrlRequest)
 
       this.log(urlToOpen)
       open(urlToOpen)
@@ -64,14 +80,14 @@ export default class Open extends Command {
     }
   }
 
-  private buildUrl(remoteUrl: string, branchName: string, relativePath: string, flags: { lineNumber: number | undefined }) : string{
-    let providers = [new GitHubUrlProvider(), new AzureDevOpsUrlProvider()]
+  private buildUrl(BuildUrlRequest : BuildUrlRequest) : string{
+    let providers : UrlProviderBase[] = [new GitHubUrlProvider(), new AzureDevOpsUrlProvider()]
 
     for(let i = 0; i < providers.length; ++i){
       let provider = providers[i]
-      if(provider.isMatch(remoteUrl)) {
+      if(provider.isMatch(BuildUrlRequest.remoteUrl)) {
         this.log(`Using provider of type "${typeof(provider)}"`)
-        return provider.buildUrl(remoteUrl, relativePath, branchName)
+        return provider.buildUrl(BuildUrlRequest)
       }
     }
 
