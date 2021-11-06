@@ -2,7 +2,7 @@ import Command, {flags} from '@oclif/command'
 import simpleGit, {SimpleGit} from 'simple-git'
 import GitHubUrlProvider from '../providers/githubUrlProvider'
 import AzureDevOpsUrlProvider from '../providers/azureDevOpsUrlProvider'
-import { BuildUrlRequest } from '../models/BuildUrlRequest'
+import { BuildUrlRequest } from '../models/buildUrlRequest'
 import { UrlProviderBase } from '../providers/urlProviderBase'
 
 export default class Open extends Command {

@@ -1,4 +1,4 @@
-import { BuildUrlRequest } from "../models/BuildUrlRequest"
+import { BuildUrlRequest } from "../models/buildUrlRequest"
 import { UrlProviderBase } from "./urlProviderBase"
 export default class AzureDevOpsUrlProvider implements UrlProviderBase {
   constructor(){}
