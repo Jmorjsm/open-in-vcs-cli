@@ -9,6 +9,14 @@ CLI tool that lets you open the specified line/file/folder/repo in GitHub/GitLab
 [![License](https://img.shields.io/npm/l/open-in-vcs-cli.svg)](https://github.com/Jmorjsm/open-in-vcs-cli/blob/master/package.json)
 
 <!-- toc -->
+* [Installing](#installing)
+* [install open-in-vcs-cli](#install-open-in-vcs-cli)
+* [Usage](#usage)
+* [open the current directory in your VCS](#open-the-current-directory-in-your-vcs)
+* [open readme.md](#open-readmemd)
+* [open readme.md, highlighting line 10](#open-readmemd-highlighting-line-10)
+* [open readme.md, highlighting line 10-line 20](#open-readmemd-highlighting-line-10-line-20)
+<!-- tocstop -->
 * [Usage](#usage)
 * [Commands](#commands)
 <!-- tocstop -->
@@ -21,6 +29,18 @@ npm install -g open-in-vcs-cli
 ```
 # Usage
 <!-- usage -->
+```sh-session
+$ npm install -g open-in-vcs-cli
+$ oiv COMMAND
+running command...
+$ oiv (-v|--version|version)
+open-in-vcs-cli/1.0.0 win32-x64 node-v16.13.0
+$ oiv --help [COMMAND]
+USAGE
+  $ oiv COMMAND
+...
+```
+<!-- usagestop -->
 ## Open
 The `open` command is the main command open-in-vcs-cli provides. It allows you to open files, directories, repositories in your version control software, based on the remote url.
 
