@@ -29,7 +29,7 @@ export default class Open extends Command {
   }
 
 
-  async run(): PromiseLike<any> {
+  async run(): Promise<any> {
     this.log('open command run in directory ' + process.cwd())
     this.getVcsRepository()
   }
