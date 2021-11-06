@@ -1,33 +1,50 @@
-export default class AzureDevOpsUrlProvider implements urlProviderBase {
-
-  constructor(){
-  }
+import { BuildUrlRequest } from "../models/BuildUrlRequest"
+import { UrlProviderBase } from "./urlProviderBase"
+export default class AzureDevOpsUrlProvider implements UrlProviderBase {
+  constructor(){}
 
   isMatch(remoteUrl: string): boolean {
     return remoteUrl.includes('dev.azure.com/')
   }
 
-  buildUrl(remoteUrl: string, filePath: string, branchName : string, startLineNumber?: number, startColumnNumber?: number, endLineNumber?: number, endColumnNumber?: number): string {
+  buildUrl(buildUrlRequest : BuildUrlRequest): string {
+    let urlToOpen = this.formatRepositoryBaseUrl(buildUrlRequest.remoteUrl, buildUrlRequest.branchName, buildUrlRequest.filePath)
+    urlToOpen += `&lineStyle=plain&_a=contents`
+
+    return urlToOpen
+  }
+
+  formatRepositoryBaseUrl(remoteUrl: string, branchName: string, filePath?: string): string {
     let url = `${remoteUrl}?path=/${filePath}&version=GB${branchName}`
-
-    if(startLineNumber != undefined) {
-      url = `${url}&line=${startLineNumber}`
-    }
-
-    if(startColumnNumber != undefined) {
-      url = `${url}&startColumnNumber=${startColumnNumber}`
-    }
-
-    if(endLineNumber != undefined) {
-      url = `${url}&endLineNumber=${endLineNumber}`
-    }
-
-    if(endColumnNumber != undefined) {
-      url = `${url}&endColumnNumber=${endColumnNumber}`
-    }
-
-    url = `${url}&lineStyle=plain&_a=contents`
-
     return url
+  }
+
+  formatLineNumbers(startLineNumber?: number, startColumnNumber?: number, endLineNumber?: number, endColumnNumber?: number): string {
+    let lineNumbers = ''
+    if(startLineNumber != undefined) {
+      lineNumbers += this.formatStartLineNumber(startLineNumber)
+    }
+    if(startColumnNumber != undefined) {
+      lineNumbers += this.formatStartColumnNumber(startColumnNumber)
+    }
+    if(endLineNumber != undefined) {
+      lineNumbers += this.formatEndLineNumber(endLineNumber)
+    }
+    if(endColumnNumber != undefined) {
+      lineNumbers += this.formatEndColumnNumber(endColumnNumber)
+    }
+    return lineNumbers
+  }
+  formatStartLineNumber(startLineNumber?: number): string {
+     return `&line=${startLineNumber}`
+  }
+  formatStartColumnNumber(startColumnNumber?: number): string {
+     return `&startColumnNumber=${startColumnNumber}`
+  }
+  formatEndLineNumber(endLineNumber?: number): string {
+     return `&endLineNumber=${endLineNumber}`
+  }
+  formatEndColumnNumber(endColumnNumber?: number): string {
+     return `&endColumnNumber=${endColumnNumber}`
   }
 }
