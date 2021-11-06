@@ -1,5 +1,6 @@
-import { BuildUrlRequest } from "../models/BuildUrlRequest"
+import { BuildUrlRequest } from "../models/buildUrlRequest"
 import { UrlProviderBase } from "./urlProviderBase"
+
 export default class AzureDevOpsUrlProvider implements UrlProviderBase {
   constructor(){}
 
@@ -24,26 +25,34 @@ export default class AzureDevOpsUrlProvider implements UrlProviderBase {
     if(startLineNumber != undefined) {
       lineNumbers += this.formatStartLineNumber(startLineNumber)
     }
+
     if(startColumnNumber != undefined) {
       lineNumbers += this.formatStartColumnNumber(startColumnNumber)
     }
+
     if(endLineNumber != undefined) {
       lineNumbers += this.formatEndLineNumber(endLineNumber)
     }
+
     if(endColumnNumber != undefined) {
       lineNumbers += this.formatEndColumnNumber(endColumnNumber)
     }
+
     return lineNumbers
   }
+
   formatStartLineNumber(startLineNumber?: number): string {
      return `&line=${startLineNumber}`
   }
+
   formatStartColumnNumber(startColumnNumber?: number): string {
      return `&startColumnNumber=${startColumnNumber}`
   }
+
   formatEndLineNumber(endLineNumber?: number): string {
      return `&endLineNumber=${endLineNumber}`
   }
+
   formatEndColumnNumber(endColumnNumber?: number): string {
      return `&endColumnNumber=${endColumnNumber}`
   }

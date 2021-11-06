@@ -1,4 +1,4 @@
-import { BuildUrlRequest } from "../models/BuildUrlRequest";
+import { BuildUrlRequest } from "../models/buildUrlRequest";
 
 export abstract class UrlProviderBase {
   abstract isMatch(remoteUrl : string) : boolean

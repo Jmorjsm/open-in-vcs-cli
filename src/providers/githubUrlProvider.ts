@@ -1,4 +1,4 @@
-import { BuildUrlRequest } from "../models/BuildUrlRequest"
+import { BuildUrlRequest } from "../models/buildUrlRequest"
 import { UrlProviderBase } from "./urlProviderBase"
 
 export default class GitHubUrlProvider implements UrlProviderBase {
@@ -13,6 +13,15 @@ export default class GitHubUrlProvider implements UrlProviderBase {
     urlToOpen += this.formatLineNumbers(buildUrlRequest.startLineNumber, buildUrlRequest.startColumnNumber, buildUrlRequest.endLineNumber, buildUrlRequest.endColumnNumber)
 
     return urlToOpen
+  }
+
+  formatRepositoryBaseUrl(remoteUrl : string, branchName : string, filePath? : string): string {
+    let repoBaseUrl = `${remoteUrl}/tree/${branchName}/`;
+    if(filePath != undefined){
+      repoBaseUrl += `${filePath}?plain=1`
+    }
+
+    return repoBaseUrl
   }
 
   formatLineNumbers(startLineNumber?: number, startColumnNumber?: number, endLineNumber?: number, endColumnNumber?: number): string {
@@ -41,14 +50,5 @@ export default class GitHubUrlProvider implements UrlProviderBase {
 
   formatEndColumnNumber(endColumnNumber?: number): string {
     throw new Error("Method not implemented.");
-  }
-
-  formatRepositoryBaseUrl(remoteUrl : string, branchName : string, filePath? : string): string {
-    let repoBaseUrl = `${remoteUrl}/tree/${branchName}/`;
-    if(filePath != undefined){
-      repoBaseUrl += `${filePath}?plain=1`
-    }
-
-    return repoBaseUrl
   }
 }

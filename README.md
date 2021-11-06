@@ -1,7 +1,7 @@
 open-in-vcs-cli
 ===============
 
-open the specified line/file/folder/repo in GitHub/GitLab/Azure DevOps
+CLI tool that lets you open the specified line/file/folder/repo in GitHub/GitLab/Azure DevOps
 
 [![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
 [![Version](https://img.shields.io/npm/v/open-in-vcs-cli.svg)](https://npmjs.org/package/open-in-vcs-cli)
@@ -12,59 +12,38 @@ open the specified line/file/folder/repo in GitHub/GitLab/Azure DevOps
 * [Usage](#usage)
 * [Commands](#commands)
 <!-- tocstop -->
+
+# Installing
+open-in-vcs-cli can  be installed using npm:
+```bash
+# install open-in-vcs-cli
+npm install -g open-in-vcs-cli
+```
 # Usage
 <!-- usage -->
-```sh-session
-$ npm install -g open-in-vcs-cli
-$ oiv COMMAND
-running command...
-$ oiv (-v|--version|version)
-open-in-vcs-cli/0.0.0 win32-x64 node-v12.16.2
-$ oiv --help [COMMAND]
-USAGE
-  $ oiv COMMAND
-...
+## Open
+The `open` command is the main command open-in-vcs-cli provides. It allows you to open files, directories, repositories in your version control software, based on the remote url.
+
+### Opening directories
+```bash
+# open the current directory in your VCS
+oiv open .
+```
+### Opening files
+```bash
+# open readme.md
+oiv open readme.md```
+```
+
+### Opening files highlighting a single line
+```bash
+# open readme.md, highlighting line 10
+oiv open readme.md --startLineNumber 10
+```
+
+### Opening files highlighting multiple lines
+```bash
+# open readme.md, highlighting line 10-line 20 
+oiv open readme.md --startLineNumber 10 --endLineNumber 20
 ```
 <!-- usagestop -->
-# Commands
-<!-- commands -->
-* [`oiv hello [FILE]`](#oiv-hello-file)
-* [`oiv help [COMMAND]`](#oiv-help-command)
-
-## `oiv hello [FILE]`
-
-describe the command here
-
-```
-USAGE
-  $ oiv hello [FILE]
-
-OPTIONS
-  -f, --force
-  -h, --help       show CLI help
-  -n, --name=name  name to print
-
-EXAMPLE
-  $ oiv hello
-  hello world from ./src/hello.ts!
-```
-
-_See code: [src/commands/hello.ts](https://github.com/Jmorjsm/open-in-vcs-cli/blob/v0.0.0/src/commands/hello.ts)_
-
-## `oiv help [COMMAND]`
-
-display help for oiv
-
-```
-USAGE
-  $ oiv help [COMMAND]
-
-ARGUMENTS
-  COMMAND  command to show help for
-
-OPTIONS
-  --all  see all commands in CLI
-```
-
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.3/src/commands/help.ts)_
-<!-- commandsstop -->
