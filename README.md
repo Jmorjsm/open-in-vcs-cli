@@ -38,32 +38,42 @@ open-in-vcs-cli/1.0.1 win32-x64 node-v16.13.0
 $ oiv --help [COMMAND]
 USAGE
   $ oiv COMMAND
+  $ oiv FILENAME 
 ...
 ```
 <!-- usagestop -->
 ## Open
 The `open` command is the main command open-in-vcs-cli provides. It allows you to open files, directories, repositories in your version control software, based on the remote url.
 
+The open command is also the default command, so it does not need to be specified after `oiv`.
 ### Opening directories
 ```bash
 # open the current directory in your VCS
 oiv open .
+# or
+oiv .
 ```
 ### Opening files
 ```bash
 # open readme.md
-oiv open readme.md```
+oiv open readme.md
+# or
+oiv readme.md
 ```
 
 ### Opening files highlighting a single line
 ```bash
 # open readme.md, highlighting line 10
 oiv open readme.md --startLineNumber 10
+# or
+oiv readme.md --startLineNumber 10
 ```
 
 ### Opening files highlighting multiple lines
 ```bash
 # open readme.md, highlighting line 10-line 20 
+oiv open readme.md --startLineNumber 10 --endLineNumber 20
+# or
 oiv open readme.md --startLineNumber 10 --endLineNumber 20
 ```
 <!-- usagestop -->
