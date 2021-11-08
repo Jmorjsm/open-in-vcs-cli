@@ -6,8 +6,9 @@ import { BuildUrlRequest } from '../models/buildUrlRequest'
 import { UrlProviderBase } from '../providers/urlProviderBase'
 
 export default class Open extends Command {
+  static aliases = ['']
   static description = 'open the line/file/directory/repo in your VCS'
-
+  
   static examples = [
     `$ oiv open .
     opening https://github.com/jmorjsm/open-in-vcs-cli...
