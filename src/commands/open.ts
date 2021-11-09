@@ -30,12 +30,6 @@ export default class Open extends Command {
   async run(): Promise<any> {
     const {args, flags} = this.parse(Open)
 
-    this.log(`fileName          : ${args.fileName}`)
-    this.log(`startLineNumber   : ${flags.startLineNumber}`)
-    this.log(`startColumnNumber : ${flags.startColumnNumber}`)
-    this.log(`endLineNumber     : ${flags.endLineNumber}`)
-    this.log(`endColumnNumber   : ${flags.endColumnNumber}`)
-
     const open = require('open')
     const path = require('path');
 
@@ -57,8 +51,6 @@ export default class Open extends Command {
 
       let relativePath = await git.revparse(['--show-prefix'])
 
-      this.log(`relativePath: ${relativePath}`)
-
       let buildUrlRequest : BuildUrlRequest = new BuildUrlRequest(remoteUrl,
         branchName,
         relativePath,
@@ -66,6 +58,22 @@ export default class Open extends Command {
         flags.startColumnNumber,
         flags.endLineNumber,
         flags.endColumnNumber)
+
+        this.log(`remoteUrl         : ${buildUrlRequest.remoteUrl}`)
+        this.log(`branchName        : ${buildUrlRequest.branchName}`)
+        this.log(`filePath          : ${buildUrlRequest.filePath}`)
+        if(buildUrlRequest.startLineNumber != undefined) {
+          this.log(`startLineNumber   : ${buildUrlRequest.startLineNumber}`)
+        }
+        if(buildUrlRequest.startColumnNumber != undefined) {
+          this.log(`startColumnNumber : ${buildUrlRequest.startColumnNumber}`)
+        }
+        if(buildUrlRequest.endLineNumber != undefined) {
+          this.log(`endLineNumber     : ${buildUrlRequest.endLineNumber}`)
+        }
+        if(buildUrlRequest.endColumnNumber != undefined) {
+          this.log(`endColumnNumber   : ${buildUrlRequest.endColumnNumber}`)
+        }
 
       let urlService = new UrlService()
 
