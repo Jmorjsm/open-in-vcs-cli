@@ -28,22 +28,20 @@ export default class Open extends Command {
   }
 
   async run(): Promise<any> {
-    this.log('open command run in directory ' + process.cwd())
-    this.getVcsRepository()
-  }
-
-  async getVcsRepository() {
-    const git = simpleGit()
-    const open = require('open')
-    const path = require('path');
-
     const {args, flags} = this.parse(Open)
+
     this.log(`fileName          : ${args.fileName}`)
     this.log(`startLineNumber   : ${flags.startLineNumber}`)
     this.log(`startColumnNumber : ${flags.startColumnNumber}`)
     this.log(`endLineNumber     : ${flags.endLineNumber}`)
     this.log(`endColumnNumber   : ${flags.endColumnNumber}`)
 
+    const open = require('open')
+    const path = require('path');
+
+    let fileDirPath = path.dirname(args.fileName)
+
+    const git = simpleGit(fileDirPath)
     let isRepo = await git.checkIsRepo()
 
     if(isRepo) {
@@ -59,7 +57,7 @@ export default class Open extends Command {
 
       let relativePath = await git.revparse(['--show-prefix'])
 
-      relativePath = path.join(relativePath, args.fileName)
+      this.log(`relativePath: ${relativePath}`)
 
       let buildUrlRequest : BuildUrlRequest = new BuildUrlRequest(remoteUrl,
         branchName,
