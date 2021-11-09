@@ -3,6 +3,7 @@ import { UrlProviderBase } from "./urlProviderBase"
 
 export default class GitHubUrlProvider implements UrlProviderBase {
   constructor(){}
+  name: string = GitHubUrlProvider.name
 
   isMatch(remoteUrl: string): boolean {
     return remoteUrl.includes('github.com/')

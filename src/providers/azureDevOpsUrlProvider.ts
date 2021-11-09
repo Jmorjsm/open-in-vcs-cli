@@ -3,6 +3,7 @@ import { UrlProviderBase } from "./urlProviderBase"
 
 export default class AzureDevOpsUrlProvider implements UrlProviderBase {
   constructor(){}
+  name: string = AzureDevOpsUrlProvider.name
 
   isMatch(remoteUrl: string): boolean {
     return remoteUrl.includes('dev.azure.com/')

@@ -29,7 +29,6 @@ export default class Open extends Command {
     endColumnNumber : flags.integer(),
   }
 
-
   async run(): Promise<any> {
     this.log('open command run in directory ' + process.cwd())
     this.getVcsRepository()
@@ -82,12 +81,15 @@ export default class Open extends Command {
   }
 
   private buildUrl(BuildUrlRequest : BuildUrlRequest) : string{
-    let providers : UrlProviderBase[] = [new GitHubUrlProvider(), new AzureDevOpsUrlProvider()]
+    let providers : UrlProviderBase[] = [
+      new GitHubUrlProvider(),
+      new AzureDevOpsUrlProvider(),
+    ]
 
     for(let i = 0; i < providers.length; ++i){
       let provider = providers[i]
       if(provider.isMatch(BuildUrlRequest.remoteUrl)) {
-        this.log(`Using provider of type "${typeof(provider)}"`)
+        this.log(`Using provider of type "${provider.name}"`)
         return provider.buildUrl(BuildUrlRequest)
       }
     }
