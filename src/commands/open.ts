@@ -1,9 +1,7 @@
 import Command, {flags} from '@oclif/command'
-import simpleGit, {SimpleGit} from 'simple-git'
-import GitHubUrlProvider from '../providers/githubUrlProvider'
-import AzureDevOpsUrlProvider from '../providers/azureDevOpsUrlProvider'
+import simpleGit from 'simple-git'
 import { BuildUrlRequest } from '../models/buildUrlRequest'
-import { UrlProviderBase } from '../providers/urlProviderBase'
+import UrlService from '../services/urlService'
 
 export default class Open extends Command {
   static aliases = ['']
@@ -71,29 +69,14 @@ export default class Open extends Command {
         flags.endLineNumber,
         flags.endColumnNumber)
 
-      let urlToOpen = this.buildUrl(buildUrlRequest)
+      let urlService = new UrlService()
+
+      let urlToOpen = urlService.buildUrl(buildUrlRequest)
 
       this.log(urlToOpen)
       open(urlToOpen)
     } else {
       this.log('is not a repo')
     }
-  }
-
-  private buildUrl(BuildUrlRequest : BuildUrlRequest) : string{
-    let providers : UrlProviderBase[] = [
-      new GitHubUrlProvider(),
-      new AzureDevOpsUrlProvider(),
-    ]
-
-    for(let i = 0; i < providers.length; ++i){
-      let provider = providers[i]
-      if(provider.isMatch(BuildUrlRequest.remoteUrl)) {
-        this.log(`Using provider of type "${provider.name}"`)
-        return provider.buildUrl(BuildUrlRequest)
-      }
-    }
-
-    throw new Error('Failed to build url as no url providers matched the remote.')
   }
 }
