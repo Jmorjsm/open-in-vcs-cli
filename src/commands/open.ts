@@ -25,6 +25,7 @@ export default class Open extends Command {
     startColumnNumber : flags.integer(),
     endLineNumber : flags.integer(),
     endColumnNumber : flags.integer(),
+    dryRun : flags.boolean(),
   }
 
   async run(): Promise<any> {
@@ -32,10 +33,21 @@ export default class Open extends Command {
 
     const open = require('open')
     const path = require('path');
+    const fs = require('fs')
 
-    let fileDirPath = path.dirname(args.fileName)
+    let fullDirPath = path.join(process.cwd(), args.fileName)
 
-    const git = simpleGit(fileDirPath)
+    let fileDir
+    if(fs.lstatSync(fullDirPath).isFile()) {
+      fileDir = path.dirname(fullDirPath)
+    }
+    else{
+      fileDir = fullDirPath
+    }
+
+    const git = simpleGit()
+
+    git.cwd(fileDir)
     let isRepo = await git.checkIsRepo()
 
     if(isRepo) {
@@ -48,8 +60,10 @@ export default class Open extends Command {
       }
 
       let branchName = (await git.branch()).current
-
       let relativePath = await git.revparse(['--show-prefix'])
+      if(fs.lstatSync(fullDirPath).isFile()) {
+        relativePath = path.join(relativePath, path.basename(args.fileName))
+      }
 
       let buildUrlRequest : BuildUrlRequest = new BuildUrlRequest(remoteUrl,
         branchName,
@@ -80,7 +94,9 @@ export default class Open extends Command {
       let urlToOpen = urlService.buildUrl(buildUrlRequest)
 
       this.log(urlToOpen)
-      open(urlToOpen)
+      if(!flags.dryRun){
+        open(urlToOpen)
+      }
     } else {
       this.log('is not a repo')
     }
