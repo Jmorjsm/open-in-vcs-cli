@@ -10,6 +10,18 @@ CLI tool that lets you open the specified line/file/folder/repo in GitHub/GitLab
 
 <!-- toc -->
 * [Installing](#installing)
+* [install open-in-vcs-cli](#install-open-in-vcs-cli)
+* [Usage](#usage)
+* [open the current directory in your VCS](#open-the-current-directory-in-your-vcs)
+* [or](#or)
+* [open readme.md](#open-readmemd)
+* [or](#or-1)
+* [open readme.md, highlighting line 10](#open-readmemd-highlighting-line-10)
+* [or](#or-2)
+* [open readme.md, highlighting line 10-line 20](#open-readmemd-highlighting-line-10-line-20)
+* [or](#or-3)
+<!-- tocstop -->
+* [Installing](#installing)
 * [Usage](#usage)
 <!-- tocstop -->
 
@@ -21,6 +33,18 @@ npm install -g open-in-vcs-cli
 ```
 # Usage
 <!-- usage -->
+```sh-session
+$ npm install -g open-in-vcs-cli
+$ oiv COMMAND
+running command...
+$ oiv (-v|--version|version)
+open-in-vcs-cli/1.0.3 win32-x64 node-v12.16.2
+$ oiv --help [COMMAND]
+USAGE
+  $ oiv COMMAND
+...
+```
+<!-- usagestop -->
 ```sh-session
 $ npm install -g open-in-vcs-cli
 $ oiv COMMAND
