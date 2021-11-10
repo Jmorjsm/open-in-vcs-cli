@@ -1,9 +1,7 @@
 import Command, {flags} from '@oclif/command'
-import simpleGit, {SimpleGit} from 'simple-git'
-import GitHubUrlProvider from '../providers/githubUrlProvider'
-import AzureDevOpsUrlProvider from '../providers/azureDevOpsUrlProvider'
+import simpleGit from 'simple-git'
 import { BuildUrlRequest } from '../models/buildUrlRequest'
-import { UrlProviderBase } from '../providers/urlProviderBase'
+import UrlService from '../services/urlService'
 
 export default class Open extends Command {
   static aliases = ['']
@@ -29,24 +27,15 @@ export default class Open extends Command {
     endColumnNumber : flags.integer(),
   }
 
-
   async run(): Promise<any> {
-    this.log('open command run in directory ' + process.cwd())
-    this.getVcsRepository()
-  }
+    const {args, flags} = this.parse(Open)
 
-  async getVcsRepository() {
-    const git = simpleGit()
     const open = require('open')
     const path = require('path');
 
-    const {args, flags} = this.parse(Open)
-    this.log(`fileName          : ${args.fileName}`)
-    this.log(`startLineNumber   : ${flags.startLineNumber}`)
-    this.log(`startColumnNumber : ${flags.startColumnNumber}`)
-    this.log(`endLineNumber     : ${flags.endLineNumber}`)
-    this.log(`endColumnNumber   : ${flags.endColumnNumber}`)
+    let fileDirPath = path.dirname(args.fileName)
 
+    const git = simpleGit(fileDirPath)
     let isRepo = await git.checkIsRepo()
 
     if(isRepo) {
@@ -62,8 +51,6 @@ export default class Open extends Command {
 
       let relativePath = await git.revparse(['--show-prefix'])
 
-      relativePath = path.join(relativePath, args.fileName)
-
       let buildUrlRequest : BuildUrlRequest = new BuildUrlRequest(remoteUrl,
         branchName,
         relativePath,
@@ -72,26 +59,30 @@ export default class Open extends Command {
         flags.endLineNumber,
         flags.endColumnNumber)
 
-      let urlToOpen = this.buildUrl(buildUrlRequest)
+        this.log(`remoteUrl         : ${buildUrlRequest.remoteUrl}`)
+        this.log(`branchName        : ${buildUrlRequest.branchName}`)
+        this.log(`filePath          : ${buildUrlRequest.filePath}`)
+        if(buildUrlRequest.startLineNumber != undefined) {
+          this.log(`startLineNumber   : ${buildUrlRequest.startLineNumber}`)
+        }
+        if(buildUrlRequest.startColumnNumber != undefined) {
+          this.log(`startColumnNumber : ${buildUrlRequest.startColumnNumber}`)
+        }
+        if(buildUrlRequest.endLineNumber != undefined) {
+          this.log(`endLineNumber     : ${buildUrlRequest.endLineNumber}`)
+        }
+        if(buildUrlRequest.endColumnNumber != undefined) {
+          this.log(`endColumnNumber   : ${buildUrlRequest.endColumnNumber}`)
+        }
+
+      let urlService = new UrlService()
+
+      let urlToOpen = urlService.buildUrl(buildUrlRequest)
 
       this.log(urlToOpen)
       open(urlToOpen)
     } else {
       this.log('is not a repo')
     }
-  }
-
-  private buildUrl(BuildUrlRequest : BuildUrlRequest) : string{
-    let providers : UrlProviderBase[] = [new GitHubUrlProvider(), new AzureDevOpsUrlProvider()]
-
-    for(let i = 0; i < providers.length; ++i){
-      let provider = providers[i]
-      if(provider.isMatch(BuildUrlRequest.remoteUrl)) {
-        this.log(`Using provider of type "${typeof(provider)}"`)
-        return provider.buildUrl(BuildUrlRequest)
-      }
-    }
-
-    throw new Error('Failed to build url as no url providers matched the remote.')
   }
 }

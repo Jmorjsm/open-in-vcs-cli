@@ -1,6 +1,7 @@
 import { BuildUrlRequest } from "../models/buildUrlRequest";
 
 export abstract class UrlProviderBase {
+  abstract name : string
   abstract isMatch(remoteUrl : string) : boolean
   abstract buildUrl(buildUrlRequest : BuildUrlRequest): string
   abstract formatRepositoryBaseUrl(remoteUrl : string, branchName : string, filePath : string): string
