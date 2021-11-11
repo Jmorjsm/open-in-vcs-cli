@@ -1,13 +1,15 @@
 import { BuildUrlRequest } from "../models/buildUrlRequest"
 import { UrlProviderBase } from "../providers/urlProviderBase"
-import GitHubUrlProvider from '../providers/githubUrlProvider'
 import AzureDevOpsUrlProvider from '../providers/azureDevOpsUrlProvider'
+import GitHubUrlProvider from '../providers/githubUrlProvider'
+import GitLabUrlProvider from "../providers/gitlabUrlProvider"
 
 export default class UrlService {
   constructor(){}
   static providers : UrlProviderBase[] = [
-    new GitHubUrlProvider(),
     new AzureDevOpsUrlProvider(),
+    new GitHubUrlProvider(),
+    new GitLabUrlProvider(),
   ]
 
   public buildUrl(BuildUrlRequest : BuildUrlRequest) : string {
