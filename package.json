@@ -1,7 +1,7 @@
 {
   "name": "open-in-vcs-cli",
   "description": "open the specified line/file/folder/repo in GitHub/GitLab/Azure DevOps",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "author": "Jon Morgan @Jmorjsm",
   "bin": {
     "oiv": "./bin/run"
