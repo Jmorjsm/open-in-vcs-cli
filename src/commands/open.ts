@@ -35,7 +35,16 @@ export default class Open extends Command {
     const path = require('path');
     const fs = require('fs')
 
-    let fullDirPath = path.join(process.cwd(), args.fileName)
+    let dirPathArg = args.fileName;
+    const lineNumbersRegex =  /(?<filePath>[^:]*):(?<startLineNumber>\d+)([:,](?<startColumnNumber>\d+))?(-(?<endLineNumber>\d+)([:,](?<endColumnNumber>\d+))?)?$/mg
+    let match = lineNumbersRegex.exec(dirPathArg)
+
+    if(match && match.groups)
+    {
+      dirPathArg = match.groups.filePath;
+    }
+
+    let fullDirPath = path.join(process.cwd(), dirPathArg)
 
     let fileDir
     if(fs.lstatSync(fullDirPath).isFile()) {
@@ -62,16 +71,16 @@ export default class Open extends Command {
       let branchName = (await git.branch()).current
       let relativePath = await git.revparse(['--show-prefix'])
       if(fs.lstatSync(fullDirPath).isFile()) {
-        relativePath = path.join(relativePath, path.basename(args.fileName))
+        relativePath = path.join(relativePath, path.basename(dirPathArg))
       }
 
       let buildUrlRequest : BuildUrlRequest = new BuildUrlRequest(remoteUrl,
         branchName,
         relativePath,
-        flags.startLineNumber,
-        flags.startColumnNumber,
-        flags.endLineNumber,
-        flags.endColumnNumber)
+        flags.startLineNumber ?? match?.groups?.startLineNumber,
+        flags.startColumnNumber ?? match?.groups?.startColumnNumber,
+        flags.endLineNumber ?? match?.groups?.endLineNumber,
+        flags.endColumnNumber ?? match?.groups?.endColumnNumber)
 
         this.log(`remoteUrl         : ${buildUrlRequest.remoteUrl}`)
         this.log(`branchName        : ${buildUrlRequest.branchName}`)
