@@ -11,7 +11,7 @@ export default class AzureDevOpsUrlProvider implements UrlProviderBase {
 
   buildUrl(buildUrlRequest : BuildUrlRequest): string {
     let urlToOpen = this.formatRepositoryBaseUrl(buildUrlRequest.remoteUrl, buildUrlRequest.branchName, buildUrlRequest.filePath)
-    urlToOpen += this.formatLineNumbers(buildUrlRequest.startLineNumber, buildUrlRequest.StartColumnNumber, buildUrlRequest.endLineNumber, buildUrlRequest.endColumnNumber)
+    urlToOpen += this.formatLineNumbers(buildUrlRequest.startLineNumber, buildUrlRequest.startColumnNumber, buildUrlRequest.endLineNumber, buildUrlRequest.endColumnNumber)
     urlToOpen += `&lineStyle=plain&_a=contents`
 
     return urlToOpen
