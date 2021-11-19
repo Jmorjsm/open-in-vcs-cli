@@ -75,7 +75,7 @@ export default class Open extends Command {
       }
 
       // Replace backslashes with forward slashes
-      relativePath = relativePath.replace("\\", "/")
+      relativePath = relativePath.replace(/\\/g, "/")
 
       let buildUrlRequest : BuildUrlRequest = new BuildUrlRequest(remoteUrl,
         branchName,
