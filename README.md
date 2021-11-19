@@ -26,7 +26,7 @@ $ npm install -g open-in-vcs-cli
 $ oiv COMMAND
 running command...
 $ oiv (-v|--version|version)
-open-in-vcs-cli/1.0.6 win32-x64 node-v12.16.2
+open-in-vcs-cli/1.0.7 win32-x64 node-v16.13.0
 $ oiv --help [COMMAND]
 USAGE
   $ oiv COMMAND
