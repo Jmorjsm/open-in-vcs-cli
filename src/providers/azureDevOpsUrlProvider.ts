@@ -25,19 +25,28 @@ export default class AzureDevOpsUrlProvider implements UrlProviderBase {
   formatLineNumbers(startLineNumber?: number, startColumnNumber?: number, endLineNumber?: number, endColumnNumber?: number): string {
     let lineNumbers = ''
     if(startLineNumber != undefined) {
-      lineNumbers += this.formatStartLineNumber(startLineNumber)
-    }
+        lineNumbers += this.formatStartLineNumber(startLineNumber)
 
-    if(startColumnNumber != undefined) {
-      lineNumbers += this.formatStartColumnNumber(startColumnNumber)
-    }
+      if(startColumnNumber != undefined) {
+        lineNumbers += this.formatStartColumnNumber(startColumnNumber)
+      }
+      else{
+        lineNumbers += this.formatStartColumnNumber(0)
+      }
 
-    if(endLineNumber != undefined) {
-      lineNumbers += this.formatEndLineNumber(endLineNumber)
-    }
+      if(endLineNumber != undefined) {
+        lineNumbers += this.formatEndLineNumber(endLineNumber)
+      }
+      else{
+        lineNumbers += this.formatEndLineNumber(startLineNumber)
+      }
 
-    if(endColumnNumber != undefined) {
-      lineNumbers += this.formatEndColumnNumber(endColumnNumber)
+      if(endColumnNumber != undefined) {
+        lineNumbers += this.formatEndColumnNumber(endColumnNumber)
+      }
+      else{
+        lineNumbers += this.formatEndColumnNumber(0)
+      }
     }
 
     return lineNumbers
