@@ -26,13 +26,14 @@ $ npm install -g open-in-vcs-cli
 $ oiv COMMAND
 running command...
 $ oiv (-v|--version|version)
-open-in-vcs-cli/1.0.7 win32-x64 node-v16.13.0
+open-in-vcs-cli/1.0.8 win32-x64 node-v12.16.2
 $ oiv --help [COMMAND]
 USAGE
   $ oiv COMMAND
 ...
 ```
 <!-- usagestop -->
+
 ## Open
 The `open` command is the main command open-in-vcs-cli provides. It allows you to open files, directories, repositories in your version control software, based on the remote url.
 
